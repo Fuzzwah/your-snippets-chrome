@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/requests.js"></script>
+    <script type="text/javascript" src="js/options.js"></script>
+  </head>
+  <body>
+    <div id="main">
+      <form class="form-horizontal col-lg-offset-3 col-md-offset-2 col-sm-offset-1 col-lg-6 col-md-8 col-sm-10 col-xs-12">
+        <fieldset>
+          <!-- Form Name -->
+          <legend>Snippets Login Details</legend>
+          <!-- Text input-->
+          <div class="form-group">
+            <label class="col-md-3 control-label" for="title">Server Address</label>
+            <div class="col-md-9">
+              <input id="server" name="server" type="text" placeholder="http://your-snippets-server.com/api/" class="form-control input-md" required="">
+            </div>
+          </div>
+          <!-- Text input-->
+          <div class="form-group">
+            <label class="col-md-3 control-label" for="title">Username</label>
+            <div class="col-md-9">
+              <input id="username" name="username" type="text" placeholder="" class="form-control input-md" required="">
+            </div>
+          </div>
+          <!-- Text input-->
+          <div class="form-group">
+            <label class="col-md-3 control-label" for="title">Password</label>
+            <div class="col-md-9">
+              <input id="password" name="password" type="password" placeholder="" class="form-control input-md" required="">
+            </div>
+          </div>
+          <span class="help-block">Your password is not stored, only used to gather API token from your server.</span>
+          <!-- Button -->
+          <div class="row">
+            <div class="col-sm-offset-2 col-sm-4 col-xs-6">
+              <button id="save" name="save" class="btn btn-block btn-primary">Save Login Details</button>
+            </div>
+            <div class="col-sm-offset-2 col-sm-4 col-xs-6">
+              <button id="cancel" name="cancel" class="btn btn-block btn-default">Close</button>
+            </div>
+          </div>
+          <div class="row">
+            <p></p>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </body>
+</html>
+

@@ -1,0 +1,58 @@
+{
+  "name": "Your Snippets",
+  "short_name": "Your Snippets",
+  "version": "0.3.0",
+  "manifest_version": 2,
+  "description": "Save snippets from web sites onto your own web server.",
+  "homepage_url": "https://github.com/Fuzzwah/your-snippets-chrome",
+  "options_page": "options.html",
+  "background": {
+    "page": "images.html",
+    "persistent": true
+  },
+  "browser_action": {
+    "default_icon": {
+      "16": "icon/16.png",
+      "24": "icon/24.png",
+      "32": "icon/32.png"
+    },
+    "default_title": "Your Snippets",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/snippets.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "permissions": [
+    "webRequest",
+    "<all_urls>",
+    "tabs",
+    "contextMenus",
+    "unlimitedStorage",
+    "notifications"
+  ],
+  "icons": {
+    "16": "icon/16.png",
+    "24": "icon/24.png",
+    "32": "icon/32.png",
+    "48": "icon/48.png",
+    "64": "icon/64.png",
+    "64": "icon/64sad.png",
+    "128": "icon/128.png",
+    "512": "icon/512.png"
+  },
+  "web_accessible_resources": [
+    "icon/16.png",
+    "icon/24.png",
+    "icon/32.png",
+    "icon/48.png",
+    "icon/64.png",
+    "icon/64sad.png",
+    "icon/128.png",
+    "icon/512.png"
+  ]
+}
