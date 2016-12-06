@@ -1,7 +1,6 @@
-function readResponse() {
+function addSnippetResponse() {
   if (this.readyState == 4) {
     try {
-      console.log(this.status+' '+statusCodes[this.status]);
       if (this.status == 0) {
         throw('Status = 0');
       } else if (this.status == 201) {
@@ -10,15 +9,12 @@ function readResponse() {
         setTimeout(function(){
           window.close();
         }, 500);
+      } else if (this.response.url[0]=="snippet with this url already exists.") {
+        $("#save").removeClass("btn-primary").addClass("btn-warn");
+        $("#save").text("Previously Saved");
       } else {
         $("#save").removeClass("btn-primary").addClass("btn-danger");
         $("#save").text("Save Failed!");
-        alert(this.status+' '+statusCodes[this.status]+'\n\nUpdate your login details in this extensions options');
-        console.log(this.status+' '+statusCodes[this.status]);
-        console.log(jQuery.trim(this.getAllResponseHeaders()));
-        console.log(this.response);
-        console.log(this);
-
       }
     }
     catch(e) {
@@ -36,14 +32,43 @@ if (!isAuthAvailable()) {
 } else {
 
   $(document).ready(function() {
+    var publicItem = true
+    $("#public").change(function() {
+      if(this.checked) {
+        publicItem = true
+      } else if(!this.checked) {
+        publicItem = false
+      }
+    });
+    new Awesomplete('input[data-multiple]', {
+      list: localStorage.tags,
+      filter: function(text, input) {
+        return Awesomplete.FILTER_CONTAINS(text, input.match(/[^,]*$/)[0]);
+      },
+
+      replace: function(text) {
+        var before = this.input.value.match(/^.+,\s*|/)[0];
+        this.input.value = before + text + ", ";
+      }
+    });
     chrome.tabs.getSelected(null, function(tab) {
       $("#url").val(tab.url);
       $("#title").val(tab.title);
     });
     $("#save").click(function() {
-      var params = JSON.stringify({ title: $("#title").val(), url: $("#url").val(), content: $("#content").val(), tags: $("#tags").val(), images: [] });
-      console.log(params);
-      sendRequest(params, "add/");
+      var theseTags = $("#tags").val().split(", ");
+      var savedTags = localStorage.tags.split(",");
+      for (var i = 0, l = theseTags.length; i < l; i++) {
+        var thisTag = theseTags[i].trim()
+        if (thisTag != "") {
+          if ( $.inArray(thisTag, savedTags) === -1 ) {
+            localStorage.tags = localStorage.tags + "," + thisTag;
+          } else {
+          }
+        }
+      }
+      var params = JSON.stringify({ title: $("#title").val(), url: $("#url").val(), public: publicItem, content: $("#content").val(), tags: $("#tags").val(), images: [] });
+      sendRequest("POST", params, "add/", addSnippetResponse);
       return false;
     });
     $("#cancel").click(function() {

@@ -1,5 +1,5 @@
 function isAuthAvailable() {
-  return localStorage.username && localStorage.password;
+  return localStorage.token && localStorage.server;
 }
 
 function slugify(text) {
@@ -31,43 +31,36 @@ chrome.contextMenus.onClicked.addListener(function(menu, tab) {
 });
 
 saveImage = function(src, tab) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', src, true);
+  if (!isAuthAvailable()) {
+    alert('Update your login details in this extensions options');
+  } else {
 
-  xhr.responseType = 'arraybuffer';
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', src, true);
 
-  xhr.onload = function(e) {
-    if (this.status == 200) {
-      var uInt8Array = new Uint8Array(this.response);
-      var i = uInt8Array.length;
-      var biStr = new Array(i);
-      while (i--) {
-        biStr[i] = String.fromCharCode(uInt8Array[i]);
+    xhr.responseType = 'arraybuffer';
+
+    xhr.onload = function(e) {
+      if (this.status == 200) {
+        var uInt8Array = new Uint8Array(this.response);
+        var i = uInt8Array.length;
+        var biStr = new Array(i);
+        while (i--) {
+          biStr[i] = String.fromCharCode(uInt8Array[i]);
+        }
+        var data = biStr.join('');
+        var base64 = window.btoa(data);
+        var image64 = "data:image/png;base64," + base64;
+
+        sendImage(image64, tab);
       }
-      var data = biStr.join('');
-      var base64 = window.btoa(data);
-      var image64 = "data:image/png;base64," + base64;
+    };
 
-      sendImage(image64, tab);
-    }
-  };
-
-  xhr.send();
+    xhr.send();
+  }
 };
 
-function sendImage(image64, tab) {
-  var params = JSON.stringify({
-    title: tab.title,
-    url: tab.url,
-    images: [{
-      image: "file_name:" + slugify(tab.title) + "," + image64
-    }]
-  });
-  console.log(params);
-  sendRequest(params, "add/images/");
-}
-
-function readResponse() {
+function addImagesResponse() {
   if (this.readyState == 4) {
     console.log(this.status + ' ' + statusCodes[this.status]);
     if (this.status == 0) {
@@ -75,7 +68,7 @@ function readResponse() {
     } else if (this.status == 201) {
       var opt = {
         type: "basic",
-        title: "Uploading Complete",
+        title: "Upload Complete",
         message: "Saved as: " + this.response.images[0].image,
         iconUrl: 'icon/64.png'
       }
@@ -86,7 +79,7 @@ function readResponse() {
     } else {
       var opt = {
         type: "basic",
-        title: "Uploading Failed",
+        title: "Upload Failed",
         message: JSON.stringify(this.response),
         iconUrl: 'icon/64sad.png'
       }
@@ -97,3 +90,16 @@ function readResponse() {
 
   }
 }
+
+
+function sendImage(image64, tab) {
+  var params = JSON.stringify({
+    title: tab.title,
+    url: tab.url,
+    images: [{
+      image: "file_name:" + slugify(tab.title) + "," + image64
+    }]
+  });
+  sendRequest("POST", params, "add/images/", addImagesResponse);
+}
+

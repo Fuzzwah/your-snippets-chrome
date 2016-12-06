@@ -47,15 +47,15 @@ statusCodes[503] = 'Service Unavailable';
 statusCodes[504] = 'Gateway Time-out';
 statusCodes[505] = 'HTTP Version not supported';
 
-function sendRequest(params, endpoint) {
+function sendRequest(type, params, endpoint, callback) {
   console.log(endpoint);
   var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = readResponse;
+  xhr.onreadystatechange = callback;
   try {
     if (typeof endpoint === 'undefined') {
-      xhr.open("POST", localStorage.server, true);
+      xhr.open(type, localStorage.server, true);
     } else {
-      xhr.open("POST", localStorage.server + endpoint, true);
+      xhr.open(type, localStorage.server + endpoint, true);
     }
 
     var auth = "Token " + localStorage.token;
@@ -72,7 +72,7 @@ function sendRequest(params, endpoint) {
 
 function getToken(params, server, user, pass) {
   var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = readResponse;
+  xhr.onreadystatechange = loginResponse;
   try {
     xhr.open("POST", server + "token/", true);
 

@@ -4,8 +4,12 @@
     <meta charset="utf-8">
     <title></title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/awesomplete.css">
+    <link rel="stylesheet" href="css/your_snippets.css">
+    <link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css">
     <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/awesomplete.min.js"></script>
     <script type="text/javascript" src="js/requests.js"></script>
     <script type="text/javascript" src="js/popup.js"></script>
   </head>
@@ -41,8 +45,14 @@
               <div class="form-group">
                 <label class="col-md-2 control-label" for="tags">Tags</label>
                 <div class="col-xs-12">
-                  <input id="tags" name="tags" type="text" placeholder="" class="form-control input-md">
-                  <span class="help-block">comma separated list of tags</span>
+                  <input id="tags" name="tags" type="text" placeholder="" class="form-control input-md" data-multiple />
+                </div>
+              </div>
+              <!-- Checkbox input-->
+              <div class="form-group">
+                <div class="checkbox checkbox-primary">
+                  <input id="public" class="styled" type="checkbox" checked="">
+                  <label for="public" class="control-label">Public</label>
                 </div>
               </div>
               <!-- Button -->
