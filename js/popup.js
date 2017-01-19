@@ -56,8 +56,15 @@ if (!isAuthAvailable()) {
       $("#title").val(tab.title);
     });
     $("#save").click(function() {
-      var theseTags = $("#tags").val().split(", ");
-      var savedTags = localStorage.tags.split(",");
+      var tagField = $("#tags").val().trim();
+      if (tagField.endsWith(",")) {
+        tagField = tagField.slice(0, -1);
+      }
+      var tagFieldComp = tagField.split(", ").join(",");
+      var theseTags = tagFieldComp.split(",");
+      var savedTagsString = localStorage.tags;
+      var savedTagsStringComp = savedTagsString.split(", ").join(",");
+      var savedTags = savedTagsString.split(",");
       for (var i = 0, l = theseTags.length; i < l; i++) {
         var thisTag = theseTags[i].trim()
         if (thisTag != "") {
@@ -67,7 +74,7 @@ if (!isAuthAvailable()) {
           }
         }
       }
-      var params = JSON.stringify({ title: $("#title").val(), url: $("#url").val(), public: publicItem, content: $("#content").val(), tags: $("#tags").val(), images: [] });
+      var params = JSON.stringify({ title: $("#title").val(), url: $("#url").val(), public: publicItem, content: $("#content").val(), tags: theseTags.join(", "), images: [] });
       sendRequest("POST", params, "add/", addSnippetResponse);
       return false;
     });

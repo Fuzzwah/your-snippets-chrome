@@ -1,7 +1,7 @@
 {
   "name": "Your Snippets",
   "short_name": "Your Snippets",
-  "version": "0.4.4",
+  "version": "0.4.6",
   "manifest_version": 2,
   "description": "Save snippets from web sites onto your own web server.",
   "homepage_url": "https://github.com/Fuzzwah/your-snippets-chrome",
